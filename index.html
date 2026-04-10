@@ -272,11 +272,30 @@ h1 {
 .maps {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 6px;
   text-align: center;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 20px;
+}
+
+.maps a.done {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
+
+.maps a.current {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff4655, #ff2d55);
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
 }
 
 .maps span {
@@ -291,7 +310,19 @@ h1 {
   color: var(--muted);
   opacity: 0.7;
 }
-
+.maps .upcoming {
+  text-decoration: line-through;
+  color: var(--muted);
+  opacity: 0.7;
+}
+.maps a.upcoming {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
 /* current map */
 .maps .current {
   background: linear-gradient(135deg, #ff4655, #ff2d55);
@@ -303,13 +334,13 @@ h1 {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   text-align: center;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
 }
 .team-summary {
   margin-top: 18px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 
@@ -370,12 +401,12 @@ h1 {
   </div>
  <div class="map-timeline">
     <div class="maps">
-      <span class="done">HAVEN</span>
-      <span class="done">FRACTURE</span>
-      <span class="done">LOTUS</span>
-      <span class="current">SPLIT</span>
-      <span>BIND</span>
-      <span>BREEZE</span>
+      <a href="maps/haven.html" class="done">HAVEN</a>
+      <a href="maps/fracture.html" class="done">FRACTURE</a>
+      <a href="maps/lotus.html" class="done">LOTUS</a>
+      <a href="maps/split.html" class="current">SPLIT</a>
+      <a href="maps/bind.html"class="upcoming">BIND</a>
+      <a href="maps/breeze.html" class="upcoming">BREEZE</a>
     </div>
 
     <div class="dates">
@@ -405,6 +436,10 @@ h1 {
     <div class="team-value">125</div>
     <div class="team-label">AVG ADR</div>
   </div>
+  <div class="team-stat">
+    <div class="team-value">434</div>
+    <div class="team-label">AVG TRS</div>
+  </div>
 </div>
 </div>
 
@@ -413,7 +448,6 @@ const MOCK = [
   {
     riotId: "OglukasM#RAWRR",
     rank: "Ascendant 1",
-    rr: 100,
     kda: "102/95/23",
     hs: 24.6,
     plusMinus: "+7",
@@ -422,6 +456,7 @@ const MOCK = [
     fk: 18,
     fd: 18,
     mk: 9,
+    ats: 526,
     agents: ["x3 Omen", "x1 Astra", "x1 Neon", "x1 Raze"]
   },
   {
@@ -436,6 +471,7 @@ const MOCK = [
     fk: 10,
     fd: 6,
     mk: 6,
+    ats: 535,
     agents: ["x4 Fade", "x2 Brimstone"]
   },
   {
@@ -450,6 +486,7 @@ const MOCK = [
     fk: 5,
     fd: 9,
     mk: 4,
+    ats: 418,
     agents: ["x6 Killjoy"]
   },
   {
@@ -464,6 +501,7 @@ const MOCK = [
     fk: 12,
     fd: 16,
     mk: 3,
+    ats: 405,
     agents: ["x4 Jett"]
   },
   {
@@ -478,6 +516,7 @@ const MOCK = [
     fk: 6,
     fd: 9,
     mk: 5,
+    ats: 448,
     agents: ["x2 Cypher", "x2 Waylay"]
   },
   {
@@ -492,6 +531,7 @@ const MOCK = [
     fk: 1,
     fd: 1,
     mk: 1,
+    ats: 274,
     agents: ["x2 Skye"]
   }
 ];
@@ -626,6 +666,10 @@ grid.innerHTML = MOCK.map(p => {
         <div class="stat">
           <div class="value">${p.mk}</div>
           <div class="label">MK</div>
+        </div>
+        <div class="stat">
+          <div class="value">${p.ats}</div>
+          <div class="label">ATS</div>
         </div>
       </div>
 
