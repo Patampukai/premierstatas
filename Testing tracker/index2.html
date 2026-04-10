@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTMP Demo Stats</title>
+
+<style>
+:root {
+  --bg: #0b1020;
+  --panel: #121a30;
+  --panel-2: #18213b;
+  --text: #ffffff;
+  --muted: #9aa3b2;
+  --accent: #ff4655;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255,70,85,0.14), transparent 35%),
+    var(--bg);
+  color: var(--text);
+}
+
+.wrap {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+
+/* 🔥 blurred wallpaper */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  background: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(1px);
+  transform: scale(1.1);
+  opacity: 1;
+  z-index: 0;
+}
+
+/* dark overlay */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 30, 0.75);
+  z-index: 1;
+}
+
+/* keep content on top */
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,70,85,0.35);
+}
+
+.top {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rank-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.rank-diamond { background: #456dff; }
+.rank-ascendant { background: #1e9f7a; }
+.rank-platinum { background: #2d8fd6; }
+.rank-gold { background: #d89a23; }
+
+.name {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.rank-line {
+  margin: 8px 0 14px;
+  color: #ffd7da;
+  font-weight: bold;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  text-align: center;
+  padding: 8px;
+}
+
+.value {
+  font-weight: bold;
+}
+
+.label {
+  font-size: 11px;
+  color: var(--muted);
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <h1>PATAMPUKAI Stats</h1>
+  <div id="grid" class="grid"></div>
+</div>
+
+<script>
+const MOCK = [
+  { riotId: "OglukasM#RAWRR", rank: "Diamond 2", rr: 74, kda: "21/14/6", hs: 32 },
+  { riotId: "VoicelessV#daun", rank: "Ascendant 1", rr: 12, kda: "18/11/9", hs: 28 },
+  { riotId: "Knightly#Blawg", rank: "Platinum 3", rr: 88, kda: "16/13/5", hs: 25 },
+  { riotId: "0visman#PTMP", rank: "Diamond 1", rr: 55, kda: "20/15/7", hs: 30 },
+  { riotId: "xSugar#Ckrs", rank: "Ascendant 2", rr: 33, kda: "22/10/8", hs: 35 },
+  { riotId: "M O O C H I#whif", rank: "Gold 3", rr: 67, kda: "14/12/4", hs: 22 }
+];
+
+const BACKGROUNDS = {
+  "OglukasM": "omen.png",
+  "VoicelessV": "fade.png",
+  "Knightly": "waylay.png",
+  "0visman": "killjoy.png",
+  "xSugar": "skye.png",
+  "M O O C H I": "cypher.png"
+};
+
+function trackerUrl(id) {
+  return "https://tracker.gg/valorant/profile/riot/" + encodeURIComponent(id) + "/overview";
+}
+
+const grid = document.getElementById("grid");
+
+grid.innerHTML = MOCK.map(p => {
+  const [k,d,a] = p.kda.split("/").map(Number);
+  const kd = d > 0 ? (k/d).toFixed(2) : k.toFixed(2);
+
+  const nameOnly = p.riotId.split("#")[0];
+  const bg = BACKGROUNDS[nameOnly];
+
+  return `
+    <div class="card"
+         style="${bg ? `--bg-image: url('${bg}')` : ''}"
+         onclick="window.open('${trackerUrl(p.riotId)}','_blank')">
+
+      <div class="top">
+        <div class="rank-icon">${p.rank[0]}</div>
+        <div>
+          <div class="name">${p.riotId}</div>
+          <div class="sub">Episode Demo</div>
+        </div>
+      </div>
+
+      <div class="rank-line">${p.rank} • ${p.rr} RR</div>
+
+      <div class="stats">
+        <div class="stat"><div class="value">${p.kda}</div><div class="label">KDA</div></div>
+        <div class="stat"><div class="value">${kd}</div><div class="label">K/D</div></div>
+        <div class="stat"><div class="value">${p.hs}%</div><div class="label">HS%</div></div>
+      </div>
+
+    </div>
+  `;
+}).join("");
+</script>
+</body>
+</html>
