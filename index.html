@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PTMP Demo Stats</title>
+<title>PTMP Premier Stats</title>
 
 <style>
 :root {
@@ -21,7 +21,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Trebuchet MS, sans-serif;
   background:
     radial-gradient(circle at top, rgba(255,70,85,0.14), transparent 35%),
     var(--bg);
@@ -137,15 +137,6 @@ h1 {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
-.rank-radiant { background: linear-gradient(135deg, #ff6a7a, #ff2d55); }
-.rank-immortal { background: linear-gradient(135deg, #ff4fd8, #8b3dff); }
-.rank-ascendant { background: linear-gradient(135deg, #4ce2b4, #1e9f7a); }
-.rank-diamond { background: linear-gradient(135deg, #89b4ff, #456dff); }
-.rank-platinum { background: linear-gradient(135deg, #57d6ff, #2d8fd6); }
-.rank-gold { background: linear-gradient(135deg, #ffd56b, #d89a23); }
-.rank-silver { background: linear-gradient(135deg, #dde2ee, #9ca6b8); }
-.rank-bronze { background: linear-gradient(135deg, #d39b74, #8b5637); }
-
 .name {
   font-size: 17px;
   font-weight: 700;
@@ -234,6 +225,39 @@ h1 {
 .nav-btn:hover {
   transform: translateY(-2px);
 }
+.rank-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 64px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.rank-icon img {
+  width: 70%;
+  height: 80%;
+  object-fit: contain;
+}
+.agent-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.agent-item img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.agent-item span {
+  font-size: 12px;
+}
 .agent-pill {
   font-size: 12px;
   padding: 6px 9px;
@@ -278,7 +302,7 @@ h1 {
 const MOCK = [
   {
     riotId: "OglukasM#RAWRR",
-    rank: "Radiant",
+    rank: "Ascendant 1",
     rr: 100,
     kda: "102/95/23",
     hs: 24.6,
@@ -292,7 +316,7 @@ const MOCK = [
   },
   {
     riotId: "VoicelessV#daun",
-    rank: "Radiant",
+    rank: "Diamond 1",
     rr: 100,
     kda: "85/81/26",
     hs: 30.6,
@@ -306,7 +330,7 @@ const MOCK = [
   },
   {
     riotId: "0visman#PTMP",
-    rank: "Radiant",
+    rank: "Platinum 2",
     rr: 100,
     kda: "76/84/15",
     hs: 22.6,
@@ -320,7 +344,7 @@ const MOCK = [
   },
   {
     riotId: "M O O C H I#whif",
-    rank: "Radiant",
+    rank: "Gold 3",
     rr: 100,
     kda: "51/65/14",
     hs: 24.25,
@@ -334,7 +358,7 @@ const MOCK = [
   },
   {
     riotId: "Knightly#Blawg",
-    rank: "Radiant",
+    rank: "Diamond 1",
     rr: 100,
     kda: "39/50/15",
     hs: 35,
@@ -348,7 +372,7 @@ const MOCK = [
   },
   {
     riotId: "xSugar#Ckrs",
-    rank: "Radiant",
+    rank: "Silver 3",
     rr: 100,
     kda: "23/36/27",
     hs: 40.5,
@@ -370,17 +394,60 @@ const BACKGROUNDS = {
   "xSugar": "skye.png",
   "M O O C H I": "jett.png",
 };
+const AGENT_ICONS = {
+  "Astra": "agents/astra.png",
+  "Brimstone": "agents/brimstone.png",
+  "Breach": "agents/breach.png",
+  "Chamber": "agents/chamber.png",
+  "Clove": "agents/clove.png",
+  "Cypher": "agents/cypher.png",
+  "Deadlock": "agents/deadlock.png",
+  "Fade": "agents/fade.png",
+  "Gekko": "agents/gekko.png",
+  "Harbor": "agents/harbor.png",
+  "Iso": "agents/iso.png",
+  "Jett": "agents/jett.png",
+  "Kayo": "agents/kayo.png",
+  "Killjoy": "agents/killjoy.png",
+  "Miks": "agents/miks.png",
+  "Neon": "agents/neon.png",
+  "Omen": "agents/omen.png",
+  "Phoenix": "agents/phoenix.png",
+  "Raze": "agents/raze.png",
+  "Reyna": "agents/reyna.png",
+  "Sage": "agents/sage.png",
+  "Skye": "agents/skye.png",
+  "Sova": "agents/sova.png",
+  "Tejo": "agents/tejo.png",
+  "Veto": "agents/veto.png",
+  "Viper": "agents/viper.png",
+  "Vyse": "agents/vyse.png",
+  "Waylay": "agents/waylay.png",
+  "Yoru": "agents/yoru.png"
+};
 
 function rankMeta(rank) {
   const r = rank.toLowerCase();
-  if (r.includes("radiant")) return { cls: "rank-radiant", icon: "✦" };
-  if (r.includes("immortal")) return { cls: "rank-immortal", icon: "◆" };
-  if (r.includes("ascendant")) return { cls: "rank-ascendant", icon: "⬢" };
-  if (r.includes("diamond")) return { cls: "rank-diamond", icon: "◈" };
-  if (r.includes("platinum")) return { cls: "rank-platinum", icon: "⬡" };
-  if (r.includes("gold")) return { cls: "rank-gold", icon: "⬟" };
-  if (r.includes("silver")) return { cls: "rank-silver", icon: "⬢" };
-  return { cls: "rank-bronze", icon: "⬣" };
+  if (r.includes("radiant")) return { cls: "rank-radiant", icon: "ranks/radiant.png" };
+  if (r.includes("immortal 1")) return { cls: "rank-immortal1", icon: "ranks/immortal1.png" };
+  if (r.includes("immortal 2")) return { cls: "rank-immortal2", icon: "ranks/immortal2.png" };
+  if (r.includes("immortal 3")) return { cls: "rank-immortal3", icon: "ranks/immortal2.png" };
+  if (r.includes("ascendant 1")) return { cls: "rank-ascendant1", icon: "ranks/ascendant1.png" };
+  if (r.includes("ascendant 2")) return { cls: "rank-ascendant2", icon: "ranks/ascendant2.png" };
+  if (r.includes("ascendant 3")) return { cls: "rank-ascendant3", icon: "ranks/ascendant3.png" };
+  if (r.includes("diamond 1")) return { cls: "rank-diamond1", icon: "ranks/diamond1.png" };
+  if (r.includes("diamond 2")) return { cls: "rank-diamond2", icon: "ranks/diamond2.png" };
+  if (r.includes("diamond 3")) return { cls: "rank-diamond3", icon: "ranks/diamond3.png" };
+  if (r.includes("platinum 1")) return { cls: "rank-platinum1", icon: "ranks/plat1.png" };
+  if (r.includes("platinum 2")) return { cls: "rank-platinum2", icon: "ranks/plat2.png" };
+  if (r.includes("platinum 3")) return { cls: "rank-platinum3", icon: "ranks/plat3.png" };
+  if (r.includes("gold 1")) return { cls: "rank-gold1", icon: "ranks/gold1.png" };
+  if (r.includes("gold 2")) return { cls: "rank-gold2", icon: "ranks/gold2.png" };
+  if (r.includes("gold 3")) return { cls: "rank-gold3", icon: "ranks/gold3.png" };
+  if (r.includes("silver 1")) return { cls: "rank-silver1", icon: "ranks/silver1.png" };
+  if (r.includes("silver 2")) return { cls: "rank-silver2", icon: "ranks/silver2.png" };
+  if (r.includes("silver 3")) return { cls: "rank-silver3", icon: "ranks/silver3.png" };
+  return { cls: "rank-bronze", icon: "bronze.png" };
 }
 
 function trackerUrl(riotId) {
@@ -399,7 +466,9 @@ grid.innerHTML = MOCK.map(p => {
   return `
     <div class="card" ${styleAttr} role="link" tabindex="0" onclick="window.open('${href}', '_blank', 'noopener,noreferrer')" onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('${href}', '_blank', 'noopener,noreferrer'); }">
       <div class="top">
-        <div class="rank-icon ${meta.cls}">${meta.icon}</div>
+        <div class="rank-icon ${meta.cls}">
+  <img src="${meta.icon}" alt="" />
+</div>
         <div>
           <div class="name" title="${p.riotId}">${p.riotId}</div>
           <div class="sub">Season 26 Act 2 Premier</div>
@@ -453,7 +522,19 @@ grid.innerHTML = MOCK.map(p => {
       <div class="agents-box">
         <div class="agents-title">AGENTS PLAYED</div>
         <div class="agents-list">
-          ${p.agents.map(agent => `<span class="agent-pill">${agent}</span>`).join("")}
+          ${p.agents.map(a => {
+  const match = a.match(/x(\d+)\s(.+)/);
+  const count = match ? match[1] : "";
+  const name = match ? match[2] : a;
+  const icon = AGENT_ICONS[name] || "";
+
+  return `
+    <div class="agent-item">
+      <img src="${icon}" alt="${name}">
+      <span>x${count}</span>
+    </div>
+  `;
+}).join("")}
         </div>
       </div>
     </div>
