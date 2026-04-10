@@ -53,7 +53,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
 }
 
@@ -64,14 +64,15 @@ h1 {
   background-size: cover;
   background-position: center;
   border: 1px solid var(--border);
-  padding: 16px;
+  padding: 12px;
   border-radius: 16px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   box-shadow: var(--shadow);
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  min-height: 340px;
+  min-height: 280px;
+
 }
 
 .card::before {
@@ -163,9 +164,9 @@ h1 {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 8px;
+  
 }
 
 .stat {
@@ -173,18 +174,18 @@ h1 {
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
   text-align: center;
-  padding: 10px 8px;
+  padding: 8px 6px;
   backdrop-filter: blur(3px);
 }
 
 .value {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 13px;
   margin-bottom: 4px;
 }
 
 .label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.5px;
 }
@@ -250,13 +251,88 @@ h1 {
 }
 
 .agent-item img {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
 }
 
 .agent-item span {
   font-size: 12px;
+}
+.map-timeline {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(4px);
+}
+
+/* maps row */
+.maps {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 6px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.maps span {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+}
+
+/* completed maps */
+.maps .done {
+  text-decoration: line-through;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* current map */
+.maps .current {
+  background: linear-gradient(135deg, #ff4655, #ff2d55);
+  color: white;
+}
+
+/* dates row */
+.dates {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+.team-summary {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.team-stat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.team-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #ff6a7a;
+}
+
+.team-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
 }
 .agent-pill {
   font-size: 12px;
@@ -292,10 +368,44 @@ h1 {
   <div class="note">
     Season 26 Act 2 Premier
   </div>
+ <div class="map-timeline">
+    <div class="maps">
+      <span class="done">HAVEN</span>
+      <span class="done">FRACTURE</span>
+      <span class="done">LOTUS</span>
+      <span class="current">SPLIT</span>
+      <span>BIND</span>
+      <span>BREEZE</span>
+    </div>
 
+    <div class="dates">
+      <span>Mar 21</span>
+      <span>Mar 28</span>
+      <span>Apr 4</span>
+      <span>Apr 11</span>
+      <span>Apr 18</span>
+      <span>Apr 25</span>
+    </div>
+  </div>
   <div class="row-scroll">
     <div id="grid" class="grid"></div>
   </div>
+  <div class="team-summary">
+  <div class="team-stat">
+    <div class="team-value">29.6%</div>
+    <div class="team-label">AVG HS%</div>
+  </div>
+
+  <div class="team-stat">
+    <div class="team-value">0.95</div>
+    <div class="team-label">AVG K/D</div>
+  </div>
+
+  <div class="team-stat">
+    <div class="team-value">125</div>
+    <div class="team-label">AVG ADR</div>
+  </div>
+</div>
 </div>
 
 <script>
