@@ -180,7 +180,7 @@ h1 {
 
 .value {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   margin-bottom: 4px;
 }
 
@@ -404,8 +404,8 @@ h1 {
       <a href="maps/haven.html" class="done">HAVEN</a>
       <a href="maps/fracture.html" class="done">FRACTURE</a>
       <a href="maps/lotus.html" class="done">LOTUS</a>
-      <a href="maps/split.html" class="current">SPLIT</a>
-      <a href="maps/bind.html"class="upcoming">BIND</a>
+      <a href="maps/split.html" class="done">SPLIT</a>
+      <a href="maps/bind.html"class="current">BIND</a>
       <a href="maps/breeze.html" class="upcoming">BREEZE</a>
     </div>
 
@@ -423,7 +423,7 @@ h1 {
   </div>
   <div class="team-summary">
   <div class="team-stat">
-    <div class="team-value">29.6%</div>
+    <div class="team-value">28.1%</div>
     <div class="team-label">AVG HS%</div>
   </div>
 
@@ -433,11 +433,11 @@ h1 {
   </div>
 
   <div class="team-stat">
-    <div class="team-value">125</div>
+    <div class="team-value">130</div>
     <div class="team-label">AVG ADR</div>
   </div>
   <div class="team-stat">
-    <div class="team-value">434</div>
+    <div class="team-value">491</div>
     <div class="team-label">AVG TRS</div>
   </div>
 </div>
@@ -448,46 +448,46 @@ const MOCK = [
   {
     riotId: "OglukasM#RAWRR",
     rank: "Ascendant 1",
-    kda: "102/95/23",
-    hs: 24.6,
-    plusMinus: "+7",
-    kd: "1.07",
-    adr: "157.68",
-    fk: 18,
-    fd: 18,
-    mk: 9,
-    ats: 526,
-    agents: ["x3 Omen", "x1 Astra", "x1 Neon", "x1 Raze"]
+    kda: "140/121/41",
+    hs: 27.9,
+    plusMinus: "+19",
+    kd: "1.16",
+    adr: "160",
+    fk: 20,
+    fd: 20,
+    mk: 14,
+    ats: 551,
+    agents: ["x5 Omen", "x1 Astra", "x1 Neon", "x1 Raze"]
   },
   {
-    riotId: "VoicelessV#daun",
+    riotId: "NedsonasV#ptmp",
     rank: "Diamond 1",
     rr: 100,
-    kda: "85/81/26",
-    hs: 30.6,
-    plusMinus: "+4",
-    kd: "1.04",
-    adr: "130",
-    fk: 10,
-    fd: 6,
-    mk: 6,
-    ats: 535,
-    agents: ["x4 Fade", "x2 Brimstone"]
+    kda: "120/104/32",
+    hs: 29.1,
+    plusMinus: "+16",
+    kd: "1.15",
+    adr: "134",
+    fk: 19,
+    fd: 9,
+    mk: 7,
+    ats: 603,
+    agents: ["x4 Fade", "x2 Brimstone", "x2 Deadlock"]
   },
   {
     riotId: "0visman#PTMP",
     rank: "Platinum 3",
     rr: 100,
-    kda: "76/84/15",
-    hs: 22.6,
-    plusMinus: "-8",
-    kd: "0.90",
-    adr: "124.8",
-    fk: 5,
-    fd: 9,
-    mk: 4,
-    ats: 418,
-    agents: ["x6 Killjoy"]
+    kda: "113/113/21",
+    hs: 22.75,
+    plusMinus: "0",
+    kd: "1",
+    adr: "136",
+    fk: 11,
+    fd: 14,
+    mk: 6,
+    ats: 507,
+    agents: ["x6 Killjoy", "x2 Sova"]
   },
   {
     riotId: "M O O C H I#whif",
@@ -508,31 +508,31 @@ const MOCK = [
     riotId: "Knightly#Blawg",
     rank: "Diamond 1",
     rr: 100,
-    kda: "39/50/15",
-    hs: 35,
-    plusMinus: "-11",
-    kd: "0.78",
-    adr: "120.2",
-    fk: 6,
-    fd: 9,
+    kda: "69/79/26",
+    hs: 36.3,
+    plusMinus: "-10",
+    kd: "0.87",
+    adr: "126",
+    fk: 10,
+    fd: 13,
     mk: 5,
-    ats: 448,
-    agents: ["x2 Cypher", "x2 Waylay"]
+    ats: 500,
+    agents: ["x2 Cypher", "x4 Waylay"]
   },
   {
     riotId: "xSugar#Ckrs",
     rank: "Silver 3",
     rr: 100,
-    kda: "23/36/27",
-    hs: 40.5,
-    plusMinus: "-13",
-    kd: "0.63",
-    adr: "97.9",
-    fk: 1,
-    fd: 1,
+    kda: "46/62/36",
+    hs: 28.25,
+    plusMinus: "-16",
+    kd: "0.74",
+    adr: "106",
+    fk: 4,
+    fd: 4,
     mk: 1,
-    ats: 274,
-    agents: ["x2 Skye"]
+    ats: 380,
+    agents: ["x2 Skye", "x2 Raze"]
   }
 ];
 
@@ -652,7 +652,10 @@ grid.innerHTML = MOCK.map(p => {
           <div class="value">${p.hs}%</div>
           <div class="label">HS%</div>
         </div>
-
+        <div class="stat">
+          <div class="value">${p.ats}</div>
+          <div class="label">ATS</div>
+        </div>
         <div class="stat">
           <div class="value">${p.fk}</div>
           <div class="label">FK</div>
@@ -666,10 +669,6 @@ grid.innerHTML = MOCK.map(p => {
         <div class="stat">
           <div class="value">${p.mk}</div>
           <div class="label">MK</div>
-        </div>
-        <div class="stat">
-          <div class="value">${p.ats}</div>
-          <div class="label">ATS</div>
         </div>
       </div>
 
