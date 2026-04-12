@@ -70,7 +70,7 @@ h1 {
   box-shadow: var(--shadow);
   cursor: pointer;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   min-height: 280px;
 
 }
@@ -170,14 +170,39 @@ h1 {
 }
 
 .stat {
+  position: relative;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
   text-align: center;
   padding: 8px 6px;
   backdrop-filter: blur(3px);
+
+  transition: 
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+
+  z-index: 1;
 }
 
+/* POP-OUT EFFECT */
+.stat:hover {
+  transform: translateY(-6px) scale(1.08);
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,70,85,0.35);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.45),
+    0 0 12px rgba(255,70,85,0.25);
+
+  z-index: 5;
+}
+.stats:hover .stat:not(:hover) {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
 .value {
   font-weight: 700;
   font-size: 12px;
@@ -359,7 +384,89 @@ h1 {
   margin-bottom: 6px;
   color: #ff6a7a;
 }
+.agent-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  cursor: default;
+}
 
+.agent-item:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,70,85,0.28);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.34),
+    0 0 10px rgba(255,70,85,0.18);
+  z-index: 8;
+}
+
+.agent-popup {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(6px) scale(0.98);
+  min-width: 120px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(14, 20, 36, 0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.42);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  text-align: center;
+  z-index: 20;
+}
+
+.agent-item:hover .agent-popup {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.agent-popup::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: rgba(14, 20, 36, 0.96) transparent transparent transparent;
+}
+
+.agent-popup-name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.agent-popup-count {
+  font-size: 20px;
+  font-weight: 200;
+  color: #ff6a7a;
+  line-height: 1;
+}
+
+.agent-popup-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
 .team-label {
   font-size: 12px;
   color: var(--muted);
@@ -457,7 +564,12 @@ const MOCK = [
     fd: 20,
     mk: 14,
     ats: 551,
-    agents: ["x5 Omen", "x1 Astra", "x1 Neon", "x1 Raze"]
+    agents: [
+      { name: "Omen", count: 5, kd: "1.48", adr: "181", hs: "32.3%" },
+      { name: "Astra", count: 1, kd: "0.50", adr: "103", hs: "28.6%" },
+      { name: "Neon", count: 1, kd: "1.25", adr: "160", hs: "20.5%" },
+      { name: "Raze", count: 1, kd: "0.36", adr: "87", hs: "6.4%" }
+    ]
   },
   {
     riotId: "Nedsonas#ptmp",
@@ -472,7 +584,11 @@ const MOCK = [
     fd: 9,
     mk: 7,
     ats: 603,
-    agents: ["x4 Fade", "x2 Brimstone", "x2 Deadlock"]
+    agents: [
+      { name: "Fade", count: 4, kd: "1.15", adr: "129", hs: "23%" },
+      { name: "Deadlock", count: 2, kd: "1.52", adr: "147", hs: "24.5%" },
+      { name: "Brimstone", count: 2, kd: "0.85", adr: "140", hs: "44.4%" }
+    ]
   },
   {
     riotId: "0visman#PTMP",
@@ -487,7 +603,10 @@ const MOCK = [
     fd: 14,
     mk: 6,
     ats: 507,
-    agents: ["x6 Killjoy", "x2 Sova"]
+    agents: [
+      { name: "Killjoy", count: 6, kd: "0.90", adr: "127", hs: "19%" },
+      { name: "Sova", count: 2, kd: "1.28", adr: "167", hs: "23.1%" }
+    ]
   },
   {
     riotId: "M O O C H I#whif",
@@ -502,7 +621,9 @@ const MOCK = [
     fd: 16,
     mk: 3,
     ats: 405,
-    agents: ["x4 Jett"]
+    agents: [
+      { name: "Jett", count: 4, kd: "0.78", adr: "118", hs: "24.6%" }
+    ]
   },
   {
     riotId: "Knightly#Blawg",
@@ -517,7 +638,10 @@ const MOCK = [
     fd: 13,
     mk: 5,
     ats: 500,
-    agents: ["x2 Cypher", "x4 Waylay"]
+    agents: [
+      { name: "Waylay", count: 4, kd: "1.10", adr: "127", hs: "30.1%" },
+      { name: "Cypher", count: 2, kd: "0.52", adr: "122", hs: "37.9%" }
+    ]
   },
   {
     riotId: "xSugar#Ckrs",
@@ -532,8 +656,11 @@ const MOCK = [
     fd: 4,
     mk: 1,
     ats: 380,
-    agents: ["x2 Skye", "x2 Raze"]
-  }
+    agents: [
+      { name: "Raze", count: 2, kd: "0.88", adr: "116", hs: "16%" },
+      { name: "Skye", count: 2, kd: "0.64", adr: "161", hs: "40.3%" }
+    ]
+  },
 ];
 
 const BACKGROUNDS = {
@@ -675,16 +802,34 @@ grid.innerHTML = MOCK.map(p => {
       <div class="agents-box">
         <div class="agents-title">AGENTS PLAYED</div>
         <div class="agents-list">
-          ${p.agents.map(a => {
-  const match = a.match(/x(\d+)\s(.+)/);
-  const count = match ? match[1] : "";
-  const name = match ? match[2] : a;
-  const icon = AGENT_ICONS[name] || "";
+          ${p.agents.map(agent => {
+  const icon = AGENT_ICONS[agent.name] || "";
 
   return `
     <div class="agent-item">
-      <img src="${icon}" alt="${name}">
-      <span>x${count}</span>
+      <img src="${icon}" alt="${agent.name}">
+      <span>x${agent.count}</span>
+
+      <div class="agent-popup">
+        <div class="agent-popup-name">${agent.name}
+  <span class="agent-popup-count">x${agent.count}</span>
+</div>
+
+        <div class="agent-popup-stats">
+          <div class="agent-popup-stat">
+            <span>K/D</span>
+            <strong>${agent.kd}</strong>
+          </div>
+          <div class="agent-popup-stat">
+            <span>ADR</span>
+            <strong>${agent.adr}</strong>
+          </div>
+          <div class="agent-popup-stat">
+            <span>HS%</span>
+            <strong>${agent.hs}</strong>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }).join("")}
