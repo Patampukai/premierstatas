@@ -303,7 +303,7 @@ h1 {
 }
 .map-tabs {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 10px;
   padding: 14px;
   margin-bottom: 18px;
@@ -347,6 +347,7 @@ h1 {
 .map-tab.split    { --map-bg: url("maps/split.png"); }
 .map-tab.bind     { --map-bg: url("maps/bind.png"); }
 .map-tab.breeze   { --map-bg: url("maps/breeze.png"); }
+.map-tab.playoff   { --map-bg: url("maps/lotus.png"); }
 
 .map-tab:hover {
   transform: translateY(-2px);
@@ -703,22 +704,22 @@ h1 {
 
   <div class="header-summary">
     <div class="header-stat">
-      <div class="header-value">26.3%</div>
+      <div class="header-value">29.9%</div>
       <div class="header-label">AVG HS%</div>
     </div>
 
     <div class="header-stat">
-      <div class="header-value">0.89</div>
+      <div class="header-value">1.08</div>
       <div class="header-label">AVG K/D</div>
     </div>
 
     <div class="header-stat">
-      <div class="header-value">122</div>
+      <div class="header-value">146</div>
       <div class="header-label">AVG ADR</div>
     </div>
 
     <div class="header-stat">
-      <div class="header-value">460</div>
+      <div class="header-value">565</div>
       <div class="header-label">AVG TRS</div>
     </div>
   </div>
@@ -756,6 +757,11 @@ h1 {
     <span class="map-name">BREEZE</span>
     <span class="map-date">Apr 25</span>
   </a>
+
+  <a href="maps/playoffs.html" class="map-tab done playoff">
+    <span class="map-name">PLAYOFFS</span>
+    <span class="map-date">Apr 26</span>
+  </a>
 </div>
   <div class="row-scroll">
     <div id="grid" class="grid"></div>
@@ -766,18 +772,19 @@ const MOCK = [
   {
     riotId: "OglukasM#RAWRR",
     rank: "Diamond 3",
-    kda: "176/139/45",
-    hs: 25.3,
+    kda: "230/179/54",
+    hs: 24.9,
     plusMinus: "+19",
-    kd: "1.27",
-    adr: "179",
-    fk: 23,
-    fd: 22,
-    mk: 15,
-    ats: 584,
+    kd: "1.29",
+    adr: "176",
+    fk: 32,
+    fd: 34,
+    mk: 23,
+    ats: 581,
     agents: [
-      { name: "Omen", count: 5, kd: "1.48", adr: "181", hs: "32.3%" },
+      { name: "Omen", count: 6, kd: "1.33", adr: "170", hs: "31.6%" },
       { name: "Raze", count: 3, kd: "1.28", adr: "182", hs: "13%" },
+      { name: "Jett", count: 2, kd: "1.80", adr: "198", hs: "23.3%" },
       { name: "Astra", count: 1, kd: "0.50", adr: "103", hs: "28.6%" },
       { name: "Neon", count: 1, kd: "1.25", adr: "160", hs: "20.5%" }
     ]
@@ -786,38 +793,39 @@ const MOCK = [
     riotId: "Nedsonas#ptmp",
     rank: "Diamond 1",
     rr: 100,
-    kda: "120/104/32",
-    hs: 29.1,
+    kda: "151/141/48",
+    hs: 27,
     plusMinus: "+16",
-    kd: "1.15",
-    adr: "134",
-    fk: 19,
-    fd: 9,
+    kd: "1.07",
+    adr: "126",
+    fk: 24,
+    fd: 12,
     mk: 7,
-    ats: 603,
+    ats: 578,
     agents: [
-      { name: "Fade", count: 4, kd: "1.15", adr: "129", hs: "23%" },
+      { name: "Fade", count: 7, kd: "1.02", adr: "120", hs: "22.8%" },
       { name: "Deadlock", count: 2, kd: "1.52", adr: "147", hs: "24.5%" },
       { name: "Brimstone", count: 2, kd: "0.85", adr: "140", hs: "44.4%" }
     ]
   },
   {
     riotId: "0visman#PTMP",
-    rank: "Diamond 1",
+    rank: "Diamond 2",
     rr: 100,
-    kda: "137/128/24",
-    hs: 21.4,
+    kda: "183/156/36",
+    hs: 22,
     plusMinus: "0",
-    kd: "1.07",
-    adr: "120",
-    fk: 12,
-    fd: 16,
-    mk: 6,
-    ats: 405,
+    kd: "1.17",
+    adr: "146",
+    fk: 19,
+    fd: 18,
+    mk: 8,
+    ats: 588,
     agents: [
-      { name: "Killjoy", count: 6, kd: "0.90", adr: "127", hs: "19%" },
+      { name: "Killjoy", count: 7, kd: "0.91", adr: "130", hs: "19.6%" },
       { name: "Sova", count: 2, kd: "1.28", adr: "167", hs: "23.1%" },
-      { name: "Deadlock", count: 2, kd: "1.60", adr: "155", hs: "17.1%" }
+      { name: "Deadlock", count: 2, kd: "1.60", adr: "155", hs: "17.1%" },
+      { name: "Viper", count: 2, kd: "1.38", adr: "169", hs: "24.3%" },
     ]
   },
   {
@@ -839,55 +847,58 @@ const MOCK = [
   },
   {
     riotId: "Knightly#Blawg",
-    rank: "Diamond 1",
+    rank: "Diamond 2",
     rr: 100,
-    kda: "83/97/31",
-    hs: 33.9,
+    kda: "128/134/47",
+    hs: 32,
     plusMinus: "-10",
-    kd: "0.86",
-    adr: "116",
-    fk: 12,
-    fd: 16,
-    mk: 5,
-    ats: 500,
+    kd: "0.96",
+    adr: "128",
+    fk: 18,
+    fd: 18,
+    mk: 7,
+    ats: 527,
     agents: [
-      { name: "Waylay", count: 6, kd: "1.02", adr: "116", hs: "29.4%" },
-      { name: "Cypher", count: 2, kd: "0.52", adr: "122", hs: "37.9%" }
+      { name: "Waylay", count: 7, kd: "1.02", adr: "116", hs: "29.4%" },
+      { name: "Cypher", count: 2, kd: "0.52", adr: "122", hs: "37.9%" },
+      { name: "Phoenix", count: 2, kd: "1.67", adr: "172", hs: "33%" },
     ]
   },
   {
     riotId: "xSugar#Ckrs",
     rank: "Gold 2",
     rr: 100,
-    kda: "59/82/47",
-    hs: 26.8,
+    kda: "62/97/49",
+    hs: 25.9,
     plusMinus: "-16",
-    kd: "0.72",
-    adr: "106",
+    kd: "0.64",
+    adr: "99",
     fk: 6,
-    fd: 5,
+    fd: 8,
     mk: 1,
-    ats: 370,
+    ats: 331,
     agents: [
       { name: "Skye", count: 4, kd: "0.64", adr: "99", hs: "32.2%" },
-      { name: "Raze", count: 2, kd: "0.88", adr: "116", hs: "16%" },
+      { name: "Raze", count: 3, kd: "0.63", adr: "100", hs: "16.7%" },
     ]
   },
   {
     riotId: "Soull#000",
     rank: "Gold 3",
     rr: 100,
-    kda: "9/22/7",
+    kda: "30/52/21",
     hs: 23.5,
     plusMinus: "0",
-    kd: "0.41",
+    kd: "0.58",
     adr: "78",
     fk: 0,
-    fd: 1,
-    mk: 0,
-    ats: 352,
+    fd: 8,
+    mk: 2,
+    ats: 381,
     agents: [
       { name: "Omen", count: 2, kd: "0.41", adr: "70", hs: "23.7%" },
+      { name: "Kayo", count: 1, kd: "0.92", adr: "122", hs: "22%" },
+      { name: "Skye", count: 1, kd: "0.53", adr: "96", hs: "25%" }
     ]
   }
 ];
