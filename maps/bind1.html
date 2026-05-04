@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bind Week</title>
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --text: #ffffff;
+      --muted: #9aa3b2;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Trebuchet MS, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      inset: -24px;
+      background: url("bind.png") center center / cover no-repeat;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: -2;
+    }
+
+    .background::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(8, 12, 24, 0.55), rgba(8, 12, 24, 0.82)),
+        radial-gradient(circle at top, rgba(255,70,85,0.10), transparent 35%);
+    }
+
+    .wrap {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 18px 20px 20px;
+      height: 100vh;
+    }
+
+    .topbar {
+      margin-bottom: 14px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-box h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .title-box p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff4655, #ff2d55);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(255,70,85,0.35);
+      display: inline-flex;
+      align-items: center;
+      height: fit-content;
+    }
+
+    .matches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 150px;
+      height: calc(100vh - 90px);
+    }
+
+    .match-card {
+      --match-glow: rgba(255, 70, 85, 0.22);
+      --match-glow-2: rgba(255, 70, 85, 0.10);
+
+      position: relative;
+      background: linear-gradient(180deg, rgba(24, 33, 59, 0.76), rgba(18, 26, 48, 0.90));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+    }
+
+    .match-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, var(--match-glow), transparent 35%),
+        radial-gradient(circle at bottom left, var(--match-glow-2), transparent 40%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .match-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .match-card.loss {
+      --match-glow: rgba(255, 70, 85, 0.26);
+      --match-glow-2: rgba(255, 70, 85, 0.12);
+    }
+
+    .match-card.win {
+      --match-glow: rgba(60, 210, 120, 0.25);
+      --match-glow-2: rgba(60, 210, 120, 0.12);
+    }
+
+    .match-card.neutral {
+      --match-glow: rgba(90, 140, 255, 0.22);
+      --match-glow-2: rgba(90, 140, 255, 0.10);
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .match-title {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .match-sub {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .score {
+      min-width: 120px;
+      text-align: right;
+    }
+
+    .score-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .score span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .players {
+      display: grid;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .player-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 10px;
+      backdrop-filter: blur(4px);
+    }
+
+    .player-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .player-name {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+.agent-pill {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-pill img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      text-align: center;
+      padding: 4px 2px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .stat span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        overflow: auto;
+      }
+
+      .wrap {
+        height: auto;
+      }
+
+      .matches {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title-box">
+        <div class="title-row">
+          <h1>BIND</h1>
+          <a href="../act1stats.html" class="back-btn">⬅ Back</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="matches" class="matches"></div>
+  </div>
+
+  <script>
+    const MATCHES = [
+        {
+        title: "Match 1",
+        subtitle: "Patampukai vs SOULS",
+        score: "13 - 9",
+        resultClass: "win",
+        players: [
+            {
+            name: "OglukasM",
+            agent: "Skye",
+            kda: "24/12/5",
+            kd: "2",
+            adr: "192",
+            hs: "31%"
+          },
+          {
+            name: "M O O C H I",
+            agent: "Waylay",
+            kda: "20/15/2",
+            kd: "1.33",
+            adr: "156",
+            hs: "31%"
+          },
+          {
+            name: "gaujinis",
+            agent: "Deadlock",
+            kda: "19/14/2",
+            kd: "1.36",
+            adr: "149",
+            hs: "17%"
+          },
+          {
+            name: "Knightly",
+            agent: "Phoenix",
+            kda: "17/11/4",
+            kd: "1.55",
+            adr: "139",
+            hs: "19%"
+          },
+          {
+            name: "Nedsonas",
+            agent: "Brimstone",
+            kda: "9/15/8",
+            kd: "0.6",
+            adr: "89",
+            hs: "38%"
+          }
+        ]
+      },
+      {
+        title: "Match 2",
+        subtitle: "Patampukai vs Z Warriors",
+        score: "13 - 9",
+        resultClass: "win",
+        players: [
+          {
+            name: "OglukasM",
+            agent: "Skye",
+            kda: "30/14/12",
+            kd: "2.14",
+            adr: "248",
+            hs: "19%"
+          },
+          {
+            name: "M O O C H I",
+            agent: "Waylay",
+            kda: "14/19/4",
+            kd: "0.74",
+            adr: "116",
+            hs: "16%"
+          },
+          {
+            name: "Nedsonas",
+            agent: "Brimstone",
+            kda: "15/11/9",
+            kd: "1.36",
+            adr: "119",
+            hs: "43%"
+          },
+          {
+            name: "Knightly",
+            agent: "Phoenix",
+            kda: "12/15/4",
+            kd: "0.8",
+            adr: "110",
+            hs: "29%"
+          },
+          {
+            name: "gaujinis",
+            agent: "Deadlock",
+            kda: "10/16/3",
+            kd: "0.63",
+            adr: "86",
+            hs: "24%"
+          }
+        ]
+      }
+    ];
+const AGENT_ICONS = {
+  "Astra": "/agents/astra.png",
+  "Brimstone": "/agents/brimstone.png",
+  "Breach": "/agents/breach.png",
+  "Chamber": "/agents/chamber.png",
+  "Clove": "/agents/clove.png",
+  "Cypher": "/agents/cypher.png",
+  "Deadlock": "/agents/deadlock.png",
+  "Fade": "/agents/fade.png",
+  "Gekko": "/agents/gekko.png",
+  "Harbor": "/agents/harbor.png",
+  "Iso": "/agents/iso.png",
+  "Jett": "/agents/jett.png",
+  "Kayo": "/agents/kayo.png",
+  "Killjoy": "/agents/killjoy.png",
+  "Miks": "/agents/miks.png",
+  "Neon": "/agents/neon.png",
+  "Omen": "/agents/omen.png",
+  "Phoenix": "/agents/phoenix.png",
+  "Raze": "/agents/raze.png",
+  "Reyna": "/agents/reyna.png",
+  "Sage": "/agents/sage.png",
+  "Skye": "/agents/skye.png",
+  "Sova": "/agents/sova.png",
+  "Tejo": "/agents/tejo.png",
+  "Veto": "/agents/veto.png",
+  "Viper": "/agents/viper.png",
+  "Vyse": "/agents/vyse.png",
+  "Waylay": "/agents/waylay.png",
+  "Yoru": "/agents/yoru.png",
+  "-": "/agents/nothing.png"
+};
+    const matchesEl = document.getElementById("matches");
+
+    matchesEl.innerHTML = MATCHES.map(match => `
+      <section class="match-card ${match.resultClass}">
+        <div class="match-header">
+          <div>
+            <div class="match-title">${match.title}</div>
+            <div class="match-sub">${match.subtitle}</div>
+          </div>
+          <div class="score">
+            <div class="score-value">${match.score}</div>
+            <span>Final Score</span>
+          </div>
+        </div>
+
+        <div class="players">
+          ${match.players.map(player => `
+            <div class="player-card">
+              <div class="player-top">
+                <div class="player-name">${player.name}</div>
+                <div class="agent-pill">
+  <img src="${AGENT_ICONS[player.agent]}" alt="${player.agent}">
+</div>
+              </div>
+
+              <div class="stats">
+                <div class="stat">
+                  <div class="stat-value">${player.kda}</div>
+                  <span>K/D/A</span>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">${player.kd}</div>
+                  <span>K/D</span>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">${player.adr}</div>
+                  <span>ADR</span>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">${player.hs}</div>
+                  <span>HS%</span>
+                </div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </section>
+    `).join("");
+  </script>
+</body>
+</html>
