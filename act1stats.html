@@ -3,20 +3,1087 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Act 1 Stats</title>
+<title>PTMP Premier Stats</title>
 
 <style>
+:root {
+  --bg: #0b1020;
+  --panel: #121a30;
+  --panel-2: #18213b;
+  --text: #ffffff;
+  --muted: #9aa3b2;
+  --accent: #ff4655;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  height: 100vh;
+  font-family: Trebuchet MS, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255,70,85,0.14), transparent 35%),
+    var(--bg);
+  color: var(--text);
+}
 
-  background: url("PATAMPUKAI_STATS.png") no-repeat center center;
-  background-size: 90%; /* try 70%, 60%, etc */
-  background-color: #000;
+.wrap {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  letter-spacing: 0.5px;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.row-scroll {
+  padding-bottom: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.grid .card {
+  grid-column: span 3;
+}
+
+/* Center the 3 cards on the second row */
+.grid .card:nth-child(5) {
+  grid-column: 2 / span 3;
+}
+
+.grid .card:nth-child(6) {
+  grid-column: 5 / span 3;
+}
+
+.grid .card:nth-child(7) {
+  grid-column: 8 / span 3;
+}
+
+.card {
+  background:
+    linear-gradient(180deg, rgba(24, 33, 59, 0), rgba(18, 26, 48, 0.877)),
+    var(--bg-image, linear-gradient(180deg, var(--panel-2), var(--panel)));
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 16px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  box-shadow: var(--shadow);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  background: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  transform: scale(1.08);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card::after {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  z-index: 3;
+}
+
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,70,85,0.35);
+  box-shadow:
+    0 10px 30px rgba(165, 149, 149, 0.486),
+    0 0 20px rgba(156, 25, 36, 0.486);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card:active {
+  transform: translateY(-1px);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.rank-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat {
+  position: relative;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  text-align: center;
+  padding: 8px 6px;
+  backdrop-filter: blur(3px);
+  min-height: 50px;
+
+  transition: 
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+
+  z-index: 1;
+}
+
+/* POP-OUT EFFECT */
+.stat:hover {
+  transform: translateY(-6px) scale(1.08);
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,70,85,0.35);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.45),
+    0 0 12px rgba(255,70,85,0.25);
+
+  z-index: 5;
+}
+.stats:hover .stat:not(:hover) {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+.value {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  color: rgb(255, 255, 255);
+}
+
+.agents-box {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 12px;
+  backdrop-filter: blur(3px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 10px;
+}
+
+.agents-title {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.agents-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+
+}
+.nav-btn {
+  text-decoration: none;
+  background: linear-gradient(135deg, #ff4655, #ff2d55);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 6px 16px rgba(255,70,85,0.35);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+}
+.rank-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 64px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.rank-icon img {
+  width: 70%;
+  height: 80%;
+  object-fit: contain;
+}
+.agent-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.agent-item img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.agent-item span {
+  font-size: 12px;
+}
+.map-tabs {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  padding: 14px;
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backdrop-filter: blur(6px);
+}
+
+.map-tab {
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 12px 10px 10px;
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(10,14,28,0.72), rgba(10,14,28,0.82)),
+    var(--map-bg);
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+
+}
+.map-tab.haven    { --map-bg: url("maps/haven.png"); }
+.map-tab.fracture { --map-bg: url("maps/fracture.png"); }
+.map-tab.lotus    { --map-bg: url("maps/lotus.png"); }
+.map-tab.split    { --map-bg: url("maps/split.png"); }
+.map-tab.bind     { --map-bg: url("maps/bind.png"); }
+.map-tab.breeze   { --map-bg: url("maps/breeze.png"); }
+.map-tab.pearl   { --map-bg: url("maps/pearl.png"); }
+.map-tab.abyss   { --map-bg: url("maps/abyss.png"); }
+.map-tab.corrode  { --map-bg: url("maps/corrode.png"); }
+.map-tab.playoffs1 { --map-bg: url("maps/playoffs1.png"); }
+
+
+.map-tab:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.14);
+}
+
+.map-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+
+.map-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Completed */
+.map-tab.done {
+  opacity: 0.72;
+}
+
+.map-tab.done .map-name {
+  text-decoration: line-through;
+  color: #ffffff;
+}
+
+/* Current */
+.map-tab.current {
+  background:
+    linear-gradient(135deg, rgba(255, 70, 86, 0.212), rgba(255, 45, 83, 0.164)),
+    var(--map-bg);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 8px 24px rgba(255, 70, 86, 0.562),
+    0 0 14px rgba(255, 70, 86, 0.521);
+}
+
+.map-tab.current .map-name,
+.map-tab.current .map-date {
+  color: white;
+  text-decoration: none;
+}
+
+/* Upcoming */
+.map-tab.upcoming {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.644), rgba(0, 0, 0, 0.644)),
+    var(--map-bg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.7;
+}
+
+.map-tab.upcoming .map-name {
+  color: #ffffff;
+}
+
+.map-tab.upcoming .map-date {
+  color: #ffffff;
+}
+.map-tab.done .map-date {
+  color: #ffffff;
+}
+.team-summary {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.team-stat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.team-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #ff6a7a;
+}
+.agent-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  cursor: default;
+}
+
+.agent-item:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,70,85,0.28);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.34),
+    0 0 10px rgba(255,70,85,0.18);
+  z-index: 8;
+}
+
+.agent-popup {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(6px) scale(0.98);
+  min-width: 120px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(14, 20, 36, 0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.42);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  text-align: center;
+  z-index: 20;
+}
+
+.agent-item:hover .agent-popup {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.agent-popup::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: rgba(14, 20, 36, 0.96) transparent transparent transparent;
+}
+
+.agent-popup-name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.agent-popup-count {
+  font-size: 20px;
+  font-weight: 200;
+  color: #ff6a7a;
+  line-height: 1;
+}
+
+.agent-popup-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+.team-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+.agent-pill {
+  font-size: 12px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.header-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.header-stat {
+  min-width: 90px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.header-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff6a7a;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.header-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.rank-ascendant1,
+.rank-ascendant2,
+.rank-ascendant3 {
+  color: #6dfc8c;
+  background: rgba(109,252,140,0.15);
+  box-shadow: 0 0 10px rgba(109,252,140,0.35);
+}
+
+/* IMMORTAL */
+.rank-immortal1,
+.rank-immortal2,
+.rank-immortal3 {
+  color: #ff4d6d;
+  background: rgba(255,77,109,0.15);
+  box-shadow: 0 0 12px rgba(255,77,109,0.4);
+}
+
+/* DIAMOND */
+.rank-diamond1,
+.rank-diamond2,
+.rank-diamond3 {
+  color: #c084fc;
+  background: rgba(192,132,252,0.15);
+  box-shadow: 0 0 10px rgba(192,132,252,0.35);
+}
+
+/* PLATINUM */
+.rank-platinum1,
+.rank-platinum2,
+.rank-platinum3 {
+  color: #67e8f9;
+  background: rgba(103,232,249,0.15);
+  box-shadow: 0 0 10px rgba(103,232,249,0.35);
+}
+
+/* GOLD */
+.rank-gold1,
+.rank-gold2,
+.rank-gold3 {
+  color: #facc15;
+  background: rgba(250,204,21,0.15);
+  box-shadow: 0 0 10px rgba(250,204,21,0.35);
+}
+
+/* SILVER */
+.rank-silver1,
+.rank-silver2,
+.rank-silver3 {
+  color: #cbd5f5;
+  background: rgba(203,213,245,0.15);
+  box-shadow: 0 0 8px rgba(203,213,245,0.3);
+}
+
+/* BRONZE */
+.rank-bronze {
+  color: #d6a77a;
+  background: rgba(214,167,122,0.15);
+  box-shadow: 0 0 8px rgba(214,167,122,0.3);
+}
+
+/* RADIANT (extra just in case 👀) */
+.rank-radiant {
+  color: #ffe066;
+  background: rgba(255,224,102,0.18);
+  box-shadow: 0 0 14px rgba(255,224,102,0.5);
+}
+
+.rank-badge {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  color: #ffd7da;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 1400px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid .card,
+  .grid .card:nth-child(5),
+  .grid .card:nth-child(6),
+  .grid .card:nth-child(7) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+@media (max-width: 1100px) {
+  .map-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .map-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="wrap">
+  <div class="top-bar">
+  <div class="title-row">
+    <h1>✨PATAMPUKAI Stats✨</h1>
+    <a href="index.html" class="nav-btn">BACK</a>
+  </div>
+
+  <div class="header-summary">
+    <div class="header-stat">
+      <div class="header-value">22.3%</div>
+      <div class="header-label">AVG HS%</div>
+    </div>
+
+    <div class="header-stat">
+      <div class="header-value">1.06</div>
+      <div class="header-label">AVG K/D</div>
+    </div>
+
+    <div class="header-stat">
+      <div class="header-value">139</div>
+      <div class="header-label">AVG ADR</div>
+    </div>
+
+    <div class="header-stat">
+      <div class="header-value">443</div>
+      <div class="header-label">AVG TRS</div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+</div>
+<div class="map-tabs">
+  <a href="maps/split1.html" class="map-tab done split">
+    <span class="map-name">SPLIT</span>
+    <span class="map-date">Jan 17</span>
+  </a>
+
+  <a href="maps/breeze1.html" class="map-tab done breeze">
+    <span class="map-name">BREEZE</span>
+    <span class="map-date">Jan 24</span>
+  </a>
+
+  <a href="maps/pearl1.html" class="map-tab done pearl">
+    <span class="map-name">PEARL</span>
+    <span class="map-date">Jan 31</span>
+  </a>
+
+  <a href="maps/bind1.html" class="map-tab done bind">
+    <span class="map-name">BIND</span>
+    <span class="map-date">Feb 7</span>
+  </a>
+
+  <a href="maps/abyss1.html" class="map-tab done abyss">
+    <span class="map-name">ABYSS</span>
+    <span class="map-date">Feb 14</span>
+  </a>
+
+  <a href="maps/corrode1.html" class="map-tab done corrode">
+    <span class="map-name">CORRODE</span>
+    <span class="map-date">Feb 21</span>
+  </a>
+
+  <a href="maps/haven1.html" class="map-tab done haven">
+    <span class="map-name">HAVEN</span>
+    <span class="map-date">Feb 26</span>
+  </a>
+  <a href="maps/playoffs1.html" class="map-tab done playoffs1">
+    <span class="map-name">PLAYOFFS</span>
+    <span class="map-date">Mar 1</span>
+  </a>
+</div>
+  <div class="row-scroll">
+    <div id="grid" class="grid"></div>
+  </div>
+
+<script>
+const MOCK = [
+  {
+    riotId: "Nedas",
+    rank: "Diamond 1",
+    kda: "284/240/132",
+    hs: 28,
+    plusMinus: "+19",
+    kd: "1.18",
+    adr: "142",
+    fk: 15,
+    fd: 21,
+    mk: 24,
+    ats: 647,
+    agents: [
+      { name: "Brimstone", count: 9, kd: "1.07", adr: "135", hs: "28%" },
+      { name: "Fade", count: 7, kd: "1.29", adr: "145", hs: "26.7%" },
+      { name: "Raze", count: 1, kd: "1.38", adr: "204", hs: "12%" }
+    ]
+  },
+  {
+    riotId: "Lukas",
+    rank: "Ascendant 1",
+    rr: 100,
+    kda: "287/206/101",
+    hs: 22,
+    plusMinus: "+16",
+    kd: "1.39",
+    adr: "178",
+    fk: 52,
+    fd: 21,
+    mk: 24,
+    ats: 782,
+    agents: [
+      { name: "Omen", count: 4, kd: "1.56", adr: "190", hs: "28%" },
+      { name: "Skye", count: 4, kd: "1.67", adr: "178", hs: "18.7%" },
+      { name: "Sova", count: 2, kd: "1.77", adr: "206", hs: "17.9%" },
+      { name: "Viper", count: 2, kd: "0.97", adr: "140", hs: "19.4%" },
+      { name: "Yoru", count: 1, kd: "1", adr: "165", hs: "27.8%" },
+      { name: "Neon", count: 1, kd: "0.69", adr: "141", hs: "11.4%" }
+    ]
+  },
+  {
+    riotId: "Ovis",
+    rank: "Platinum 1",
+    rr: 100,
+    kda: "244/242/68",
+    hs: 20,
+    plusMinus: "0",
+    kd: "1.01",
+    adr: "129",
+    fk: 38,
+    fd: 39,
+    mk: 15,
+    ats: 334,
+    agents: [
+      { name: "Chamber", count: 8, kd: "1.04", adr: "136", hs: "22.3%" },
+      { name: "Deadlock", count: 8, kd: "0.98", adr: "125", hs: "18.5%" }
+    ]
+  },
+  {
+    riotId: "Rokas",
+    rank: "Diamond 3",
+    rr: 100,
+    kda: "231/196/63",
+    hs: 25,
+    plusMinus: "-14",
+    kd: "1.18",
+    adr: "148",
+    fk: 36,
+    fd: 34,
+    mk: 19,
+    ats: 531,
+    agents: [
+      { name: "Waylay", count: 6, kd: "1.46", adr: "168", hs: "24.8%" },
+      { name: "Phoenix", count: 5, kd: "1", adr: "132", hs: "25.1%" },
+      { name: "Neon", count: 2, kd: "0.93", adr: "131", hs: "16.7%" }
+    ]
+  },
+  {
+    riotId: "exho",
+    rank: "Platinum 1",
+    rr: 100,
+    kda: "96/107/63",
+    hs: 30,
+    plusMinus: "-10",
+    kd: "0.9",
+    adr: "124",
+    fk: 9,
+    fd: 12,
+    mk: 9,
+    ats: 334,
+    agents: [
+      { name: "Brimstone", count: 3, kd: "0.75", adr: "110", hs: "19.1%" },
+      { name: "Sova", count: 2, kd: "1.25", adr: "153", hs: "48.5%" },
+      { name: "Omen", count: 1, kd: "0.82", adr: "112", hs: "28.3%" },
+    ]
+  },
+  {
+    riotId: "Fobis",
+    rank: "Gold 2",
+    rr: 100,
+    kda: "151/192/89",
+    hs: 13,
+    plusMinus: "-16",
+    kd: "0.79",
+    adr: "115",
+    fk: 14,
+    fd: 18,
+    mk: 5,
+    ats: 168,
+    agents: [
+      { name: "Tejo", count: 4, kd: "0.74", adr: "112", hs: "12.2%" },
+      { name: "Sage", count: 3, kd: "1", adr: "115", hs: "11.4%" },
+      { name: "Reyna", count: 4, kd: "0.63", adr: "126", hs: "19.4%" },
+      { name: "Veto", count: 3, kd: "0.94", adr: "121", hs: "14.3%" },
+      { name: "Skye", count: 3, kd: "0.7", adr: "108", hs: "11.5%" }
+    ]
+  },
+  {
+    riotId: "Edvis",
+    rank: "Gold 3",
+    rr: 100,
+    kda: "114/119/25",
+    hs: 18,
+    plusMinus: "0",
+    kd: "0.96",
+    adr: "135",
+    fk: 23,
+    fd: 27,
+    mk: 12,
+    ats: 308,
+    agents: [
+      { name: "Waylay", count: 7, kd: "0.97", adr: "129", hs: "19.9%" }
+    ]
+  }
+];
+
+const BACKGROUNDS = {
+  "OglukasM": "omen.png",
+  "Nedsonas": "fade.png",
+  "Knightly": "waylay.png",
+  "0visman": "killjoy.png",
+  "xSugar": "skye.png",
+  "M O O C H I": "jett.png",
+  "Soull": "Omen.png"
+};
+const AGENT_ICONS = {
+  "Astra": "agents/astra.png",
+  "Brimstone": "agents/brimstone.png",
+  "Breach": "agents/breach.png",
+  "Chamber": "agents/chamber.png",
+  "Clove": "agents/clove.png",
+  "Cypher": "agents/cypher.png",
+  "Deadlock": "agents/deadlock.png",
+  "Fade": "agents/fade.png",
+  "Gekko": "agents/gekko.png",
+  "Harbor": "agents/harbor.png",
+  "Iso": "agents/iso.png",
+  "Jett": "agents/jett.png",
+  "Kayo": "agents/kayo.png",
+  "Killjoy": "agents/killjoy.png",
+  "Miks": "agents/miks.png",
+  "Neon": "agents/neon.png",
+  "Omen": "agents/omen.png",
+  "Phoenix": "agents/phoenix.png",
+  "Raze": "agents/raze.png",
+  "Reyna": "agents/reyna.png",
+  "Sage": "agents/sage.png",
+  "Skye": "agents/skye.png",
+  "Sova": "agents/sova.png",
+  "Tejo": "agents/tejo.png",
+  "Veto": "agents/veto.png",
+  "Viper": "agents/viper.png",
+  "Vyse": "agents/vyse.png",
+  "Waylay": "agents/waylay.png",
+  "Yoru": "agents/yoru.png"
+};
+
+function rankMeta(rank) {
+  const r = rank.toLowerCase();
+  if (r.includes("radiant")) return { cls: "rank-radiant", icon: "ranks/radiant.png" };
+  if (r.includes("immortal 1")) return { cls: "rank-immortal1", icon: "ranks/immortal1.png" };
+  if (r.includes("immortal 2")) return { cls: "rank-immortal2", icon: "ranks/immortal2.png" };
+  if (r.includes("immortal 3")) return { cls: "rank-immortal3", icon: "ranks/immortal2.png" };
+  if (r.includes("ascendant 1")) return { cls: "rank-ascendant1", icon: "ranks/ascendant1.png" };
+  if (r.includes("ascendant 2")) return { cls: "rank-ascendant2", icon: "ranks/ascendant2.png" };
+  if (r.includes("ascendant 3")) return { cls: "rank-ascendant3", icon: "ranks/ascendant3.png" };
+  if (r.includes("diamond 1")) return { cls: "rank-diamond1", icon: "ranks/diamond1.png" };
+  if (r.includes("diamond 2")) return { cls: "rank-diamond2", icon: "ranks/diamond2.png" };
+  if (r.includes("diamond 3")) return { cls: "rank-diamond3", icon: "ranks/diamond3.png" };
+  if (r.includes("platinum 1")) return { cls: "rank-platinum1", icon: "ranks/plat1.png" };
+  if (r.includes("platinum 2")) return { cls: "rank-platinum2", icon: "ranks/plat2.png" };
+  if (r.includes("platinum 3")) return { cls: "rank-platinum3", icon: "ranks/plat3.png" };
+  if (r.includes("gold 1")) return { cls: "rank-gold1", icon: "ranks/gold1.png" };
+  if (r.includes("gold 2")) return { cls: "rank-gold2", icon: "ranks/gold2.png" };
+  if (r.includes("gold 3")) return { cls: "rank-gold3", icon: "ranks/gold3.png" };
+  if (r.includes("silver 1")) return { cls: "rank-silver1", icon: "ranks/silver1.png" };
+  if (r.includes("silver 2")) return { cls: "rank-silver2", icon: "ranks/silver2.png" };
+  if (r.includes("silver 3")) return { cls: "rank-silver3", icon: "ranks/silver3.png" };
+  return { cls: "rank-bronze", icon: "bronze.png" };
+}
+
+function trackerUrl(riotId) {
+  return "https://tracker.gg/valorant/profile/riot/" + encodeURIComponent(riotId) + "/overview";
+}
+
+const grid = document.getElementById("grid");
+
+grid.innerHTML = MOCK.map(p => {
+  const meta = rankMeta(p.rank);
+  const href = trackerUrl(p.riotId);
+  const nameOnly = p.riotId.split("#")[0];
+  const bg = BACKGROUNDS[nameOnly];
+  const styleAttr = bg ? `style="--bg-image: url('${bg}');"` : "";
+
+  return `
+    <div class="card" ${styleAttr}>
+  <div class="top">
+    <div class="left">
+      <div class="rank-icon ${meta.cls}">
+        <img src="${meta.icon}" alt="" />
+      </div>
+      <div class="name" title="${p.riotId}">${p.riotId}</div>
+    </div>
+
+    <div class="rank-badge ${meta.cls}">${p.rank}</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="value">${p.kda}</div>
+      <div class="label">K/D/A</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.kd}</div>
+      <div class="label">K/D</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.adr}</div>
+      <div class="label">ADR</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.hs}%</div>
+      <div class="label">HS%</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.ats}</div>
+      <div class="label">ATS</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.fk}</div>
+      <div class="label">FK</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.fd}</div>
+      <div class="label">FD</div>
+    </div>
+
+    <div class="stat">
+      <div class="value">${p.mk}</div>
+      <div class="label">MK</div>
+    </div>
+  </div>
+
+  <div class="agents-box">
+    <div class="agents-title">AGENTS PLAYED</div>
+    <div class="agents-list">
+      ${p.agents.map(agent => {
+        const icon = AGENT_ICONS[agent.name] || "";
+        return `
+          <div class="agent-item">
+            <img src="${icon}" alt="${agent.name}">
+            <span>x${agent.count}</span>
+
+            <div class="agent-popup">
+              <div class="agent-popup-name">${agent.name}
+                <span class="agent-popup-count">x${agent.count}</span>
+              </div>
+
+              <div class="agent-popup-stats">
+                <div class="agent-popup-stat">
+                  <span>K/D</span>
+                  <strong>${agent.kd}</strong>
+                </div>
+                <div class="agent-popup-stat">
+                  <span>ADR</span>
+                  <strong>${agent.adr}</strong>
+                </div>
+                <div class="agent-popup-stat">
+                  <span>HS%</span>
+                  <strong>${agent.hs}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  </div>
+</div>
+  `;
+}).join("");
+</script>
 </body>
 </html>
